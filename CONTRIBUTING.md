@@ -1,5 +1,7 @@
 # Contributing
 
+**English** · [Русский](CONTRIBUTING.ru.md)
+
 Add a Telegram HTML widget that someone can try or inspect. Games, utilities and small experiments are welcome.
 
 ## Suggest a widget
@@ -8,7 +10,7 @@ Add a Telegram HTML widget that someone can try or inspect. Games, utilities and
 
 ## Send a pull request
 
-1. Check the README for an existing entry. Add one English row to the directory with a short description and links to the original project and playable bot, when available.
+1. Check the README for an existing entry. Add the entry to both the English and Russian directories with a short description and links to the original project and playable bot, when available.
 2. Say how you tested it. Include the Telegram client version, the action you took and what changed on screen. If you only inspected the source, say so.
 3. For screenshots, crop to the widget and remove unrelated chats, account details and credentials.
 4. For a bundled widget, include its source, attribution and redistribution license. Keep HTML self-contained and within [Telegram’s widget limits](https://core.telegram.org/bots/widgets). Link directly to the creator’s bot for apps that rely on a separate backend.

@@ -2,6 +2,10 @@
 
 # Awesome Telegram Widgets
 
+**English** · [Русский](README.ru.md)
+
+Open [@awesomewidget_bot](https://t.me/awesomewidget_bot), tap **Start**, then **Doom Message**. You can walk through the original Hangar, open doors and fire from the buttons underneath the frame. The engine runs on the bot’s host and returns a new frame after each move.
+
 A hand-picked collection of little apps built with Telegram’s HTML widget format. The game board, calculator or forecast lives inside a chat message. Each entry links to its creator’s project or widget file.
 
 [Browse widgets](#widget-directory) · [Build a widget](#builders-workbench) · [Suggest a widget](https://github.com/ADanMan/awesome-telegram-widgets/issues/new?template=suggest-widget.md)
