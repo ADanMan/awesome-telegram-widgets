@@ -1,0 +1,24 @@
+<style>
+body{padding:14px;color:#18302d;background:#eaf4ef;font:15px sans-serif}
+h3{margin:10px 0} p{min-height:52px} button{padding:8px;margin-right:5px}
+</style>
+<strong>Pocket inbox</strong> · sample mail
+<h3 id="subject">Studio keys</h3><small id="sender">Alex · 1 of 3</small>
+<p id="body">The spare keys are at reception. Pick them up before 6.</p>
+<button id="prev">Previous</button><button id="next">Next</button>
+<script>
+const mail=[
+ ['Studio keys','Alex','The spare keys are at reception. Pick them up before 6.'],
+ ['Friday rehearsal','Morgan','We have the room from 3 to 5. Bring the new set list.'],
+ ['Prints are ready','Sam','Your three test prints are on the table by the window.']
+];
+let page=0;
+function turn(step){
+ page=(page+step+mail.length)%mail.length;
+ document.getElementById('subject').textContent=mail[page][0];
+ document.getElementById('sender').textContent=mail[page][1]+' · '+(page+1)+' of '+mail.length;
+ document.getElementById('body').textContent=mail[page][2];
+}
+document.getElementById('prev').addEventListener('click',()=>turn(-1));
+document.getElementById('next').addEventListener('click',()=>turn(1));
+</script>

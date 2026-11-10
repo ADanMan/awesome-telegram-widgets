@@ -13,9 +13,9 @@ LAB = "https://github.com/VyacheslavTeplyakov/telegram-widget-lab"
 WIDGETS = {
     "weather": ("Weather card", "Tap an hour to explore a sample forecast.", LAB + "/blob/main/examples/04-weather.html"),
     "commute": ("Commute picker", "Compare three fictional routes and their travel times.", LAB + "/blob/main/examples/05-commute.html"),
-    "pacman": ("Pacman", "Collect dots and dodge ghosts. The game build and instructions are on GitHub.", "https://github.com/ronakserry/pacman"),
-    "calculator": ("Calculator", "A compact arithmetic keypad with a Persian interface.", "https://github.com/Hamedshahi5/telegram-widgets/blob/main/calculator.html"),
-    "inbox": ("Pocket inbox", "Page through sample emails using the author's demo bot setup.", LAB),
+    "pacman": ("Pacman", "Collect dots with the arrow buttons. Avoid the ghost.", REPO + "/blob/main/bot/widgets/pacman.html"),
+    "calculator": ("Calculator", "Tap the keypad to calculate. Clear starts a new calculation.", REPO + "/blob/main/bot/widgets/calculator.html"),
+    "inbox": ("Pocket inbox", "Read three fictional emails with Previous and Next.", REPO + "/blob/main/bot/widgets/inbox.html"),
 }
 
 
@@ -29,14 +29,11 @@ def handle(message, api):
             continue
         source = {"inline_keyboard": [[{"text": "Creator's project", "url": url}]]}
         path = ROOT / "widgets" / (slug + ".html")
-        if path.is_file():
-            api("sendWidget", chat_id=chat["id"], html=path.read_text(), caption=description, reply_markup=source)
-        else:
-            api("sendMessage", chat_id=chat["id"], text=title + "\n" + description, reply_markup=source)
+        api("sendWidget", chat_id=chat["id"], html=path.read_text(), caption=description, reply_markup=source)
         return
     keyboard = [[{"text": item[0]}] for item in WIDGETS.values()]
     api("sendMessage", chat_id=chat["id"],
-        text="AwesomeWidgetBot\n\nTry Weather card or Commute picker right here. Choose another title for its project and setup instructions.",
+        text="AwesomeWidgetBot\n\nChoose a widget to open it here in the chat.",
         reply_markup={"keyboard": keyboard, "resize_keyboard": True})
 
 

@@ -33,7 +33,7 @@ An independent community collection. Each linked project keeps its own license.
 
 ## Run AwesomeWidgetBot
 
-[Open @awesomewidget_bot in Telegram](https://t.me/awesomewidget_bot). AwesomeWidgetBot is the English-language companion bot. Send `/start` in a private chat to open its five-entry menu. Weather card and Commute picker run inside messages. Pacman, Calculator and Pocket inbox open the creator’s project.
+[Open @awesomewidget_bot in Telegram](https://t.me/awesomewidget_bot). AwesomeWidgetBot is the English-language companion bot. Send `/start` in a private chat to open its five-entry menu. All five widgets run inside Telegram messages. The bot includes its own English implementations of Pacman (a turn-based maze), Calculator and Pocket inbox (three fictional messages you can page through).
 
 Create a bot with [BotFather](https://t.me/BotFather). Save its token in the owner-only file `~/.config/awesome-telegram-widgets/token` or set `TELEGRAM_BOT_TOKEN`. From the repository root run:
 

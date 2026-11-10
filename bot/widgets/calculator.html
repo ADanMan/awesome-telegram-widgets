@@ -1,0 +1,37 @@
+<style>
+body{margin:0;padding:12px;background:#192b38;color:white;font:16px sans-serif}
+#screen{text-align:right;padding:10px;font:26px monospace}
+.row{display:flex;gap:4px;margin-top:4px}button{flex:1;padding:7px;background:#375567;color:white;border:0;border-radius:6px}
+</style>
+<strong>Calculator</strong><div id="screen">0</div>
+<div class="row"><button>7</button><button>8</button><button>9</button><button>÷</button></div>
+<div class="row"><button>4</button><button>5</button><button>6</button><button>×</button></div>
+<div class="row"><button>1</button><button>2</button><button>3</button><button>−</button></div>
+<div class="row"><button>0</button><button>.</button><button>=</button><button>+</button></div>
+<div class="row"><button>Clear</button></div>
+<script>
+let entry='0', left=0, operation='', fresh=true;
+function apply(){
+ const n=Number(entry);
+ const ops={'+':()=>left+n,'−':()=>left-n,'×':()=>left*n,'÷':()=>left/n};
+ const result=ops[operation]();
+ entry=Number.isFinite(result)?String(Number(result.toPrecision(12))):'Error';
+}
+function press(key){
+ if(key==='Clear'){
+   entry='0';left=0;operation='';fresh=true;
+ }else if('0123456789.'.includes(key)){
+   if(fresh) entry='0';
+   fresh=false;
+   if(key==='.' && !entry.includes('.')) entry+='.';
+   if(key!=='.' && entry.length<14) entry=entry==='0'?key:entry+key;
+ }else if(entry!=='Error'){
+   if(operation && !fresh) apply();
+   operation=key==='=' || entry==='Error'?'':key;
+   left=Number(entry);fresh=true;
+ }
+ document.getElementById('screen').textContent=entry;
+}
+const keys=document.querySelectorAll('button');
+for(let i=0;i<keys.length;i++) keys[i].addEventListener('click',()=>press(keys[i].textContent));
+</script>
