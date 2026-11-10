@@ -3,6 +3,7 @@ import json
 import os
 import sys
 import time
+from dataclasses import dataclass
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
@@ -10,13 +11,75 @@ from urllib.request import Request, urlopen
 ROOT = Path(__file__).resolve().parent
 REPO = "https://github.com/ADanMan/awesome-telegram-widgets"
 LAB = "https://github.com/VyacheslavTeplyakov/telegram-widget-lab"
+@dataclass(frozen=True)
+class Widget:
+    title: str
+    category: str
+    keywords: str
+    description: str
+    original: str
+
+
+CATEGORIES = {"games": ("Games", "Игры"), "tools": ("Tools", "Инструменты")}
+PAGE_SIZE = 6
 WIDGETS = {
-    "weather": ("Weather card", "Tap an hour to explore a sample forecast.", LAB + "/blob/main/examples/04-weather.html"),
-    "commute": ("Commute picker", "Compare three fictional routes and their travel times.", LAB + "/blob/main/examples/05-commute.html"),
-    "pacman": ("Pacman", "Collect dots with the arrow buttons. Avoid the ghost.", "https://github.com/ronakserry/pacman"),
-    "calculator": ("Calculator", "Tap the keypad to calculate. Clear starts a new calculation.", "https://github.com/Hamedshahi5/telegram-widgets/blob/main/calculator.html"),
-    "inbox": ("Pocket inbox", "Read three fictional emails with Previous and Next.", LAB + "/blob/main/examples/07-mail-live.html"),
+    "doom": Widget("Doom Message", "games", "дум шутер shooter hangar", "Play E1M1 in the chat.", "https://github.com/ADanMan/telegram-doom-widget"),
+    "pacman": Widget("Pacman", "games", "pac-man пакман пакмен аркада лабиринт maze arcade", "Collect dots with the arrow buttons. Avoid the ghost.", "https://github.com/ronakserry/pacman"),
+    "calculator": Widget("Calculator", "tools", "калькулятор расчёт арифметика maths", "Tap the keypad to calculate. Clear starts a new calculation.", "https://github.com/Hamedshahi5/telegram-widgets/blob/main/calculator.html"),
+    "weather": Widget("Weather card", "tools", "погода прогноз осадки forecast", "Tap an hour to explore a sample forecast.", LAB + "/blob/main/examples/04-weather.html"),
+    "commute": Widget("Commute picker", "tools", "маршрут дорога транспорт route travel", "Compare three fictional routes and their travel times.", LAB + "/blob/main/examples/05-commute.html"),
+    "inbox": Widget("Pocket inbox", "tools", "почта письма ящик email mail", "Read three fictional emails with Previous and Next.", LAB + "/blob/main/examples/07-mail-live.html"),
 }
+
+
+def button(text, action):
+    return {"text": text, "callback_data": action}
+
+
+def menu(api, chat_id, text, rows, message_id=None):
+    payload = dict(chat_id=chat_id, text=text, reply_markup={"inline_keyboard": rows})
+    if message_id:
+        api("editMessageText", message_id=message_id, **payload)
+    else:
+        api("sendMessage", **payload)
+
+
+def show_catalog(api, chat_id, ru, message_id=None):
+    categories = [button(labels[ru], "category:" + key + ":0") for key, labels in CATEGORIES.items()]
+    menu(api, chat_id, "Каталог виджетов" if ru else "Widget catalog",
+         [categories, [button("Поиск" if ru else "Search", "search")]], message_id)
+
+
+def normalize(text):
+    return text.casefold().replace("ё", "е")
+
+
+def results(api, chat_id, ru, category=None, query="", page=0, message_id=None):
+    words = normalize(query).split()
+    matches = []
+    for slug, widget in WIDGETS.items():
+        if category and category != widget.category:
+            continue
+        terms = normalize(" ".join((slug, widget.title, widget.keywords, *CATEGORIES[widget.category])))
+        if all(word in terms for word in words):
+            matches.append(button(widget.title, "open:" + slug))
+    pages = max(1, (len(matches) + PAGE_SIZE - 1) // PAGE_SIZE)
+    page = min(max(0, page), pages - 1)
+    visible = matches[page * PAGE_SIZE:(page + 1) * PAGE_SIZE]
+    rows = [visible[i:i + 2] for i in range(0, len(visible), 2)]
+    prefix = "category:" + category + ":" if category else "results:"
+    arrows = []
+    if page:
+        arrows.append(button("‹ Назад" if ru else "‹ Previous", prefix + str(page - 1)))
+    if page + 1 < pages:
+        arrows.append(button("Далее ›" if ru else "Next ›", prefix + str(page + 1)))
+    if arrows:
+        rows.append(arrows)
+    rows.append([button("Категории" if ru else "Categories", "home"), button("Поиск" if ru else "Search", "search")])
+    title = CATEGORIES[category][ru] if category else (("Поиск" if ru else "Search") + " · " + query)
+    status = (("Страница" if ru else "Page") + f" {page + 1}/{pages}") if matches else (
+        "Ничего не найдено. Попробуйте другое слово." if ru else "No matches. Try another word.")
+    menu(api, chat_id, title + "\n" + status, rows, message_id)
 
 
 def handle(message, api, doom=None):
@@ -24,41 +87,38 @@ def handle(message, api, doom=None):
     if chat["type"] != "private" or not message.get("text"):
         return
     name = message["text"].strip()
-    if name.startswith("/start "):
-        slug = name.split(maxsplit=1)[1]
-        if slug == "doom":
-            name = "Doom Message"
-        elif slug in WIDGETS:
-            name = WIDGETS[slug][0]
     russian = (message.get("from", {}).get("language_code") or "").lower().startswith("ru")
-    more = {"text": "Ещё виджеты" if russian else "More widgets", "callback_data": "catalog"}
+    parts = name.split(maxsplit=1)
+    if not parts:
+        return
+    if parts[0] == "/start":
+        slug = parts[1] if len(parts) > 1 else ""
+        if slug not in WIDGETS:
+            show_catalog(api, chat["id"], russian)
+            return
+    else:
+        slug = next((key for key, widget in WIDGETS.items() if name == widget.title), None)
+        if slug is None:
+            results(api, chat["id"], russian, query=" ".join(name.split())[:256])
+            return
+    widget = WIDGETS[slug]
+    more = button("Ещё виджеты" if russian else "More widgets", "catalog")
+
     def navigation(original_url):
         original = {"text": "Оригинал" if russian else "Original project", "url": original_url}
         return {"inline_keyboard": [[more, original]]}
 
-    if name == "Doom Message":
-        markup = navigation("https://github.com/ADanMan/telegram-doom-widget")
+    if slug == "doom":
+        markup = navigation(widget.original)
         if doom is not None:
             doom.send(api, chat["id"], reply_markup=markup)
             return
         markup["inline_keyboard"].insert(0, [{"text": "Play Doom", "url": "https://t.me/ADanManDoomMessageBot?start=hangar"}])
         api("sendMessage", chat_id=chat["id"], text="Play E1M1 inside the Doom Message bot.", reply_markup=markup)
         return
-    for slug, (title, description, url) in WIDGETS.items():
-        if name != title:
-            continue
-        path = ROOT / "widgets" / (slug + ".html")
-        api("sendWidget", chat_id=chat["id"], html=path.read_text(), caption=description, reply_markup=navigation(url))
-        return
-    show_catalog(api, chat["id"], russian)
-
-
-def show_catalog(api, chat_id, russian=False):
-    choices = [("Doom Message", "doom")] + [(entry[0], slug) for slug, entry in WIDGETS.items()]
-    buttons = [{"text": title, "callback_data": "open:" + slug} for title, slug in choices]
-    api("sendMessage", chat_id=chat_id,
-        text="Выберите игру или инструмент" if russian else "Choose a game or tool",
-        reply_markup={"inline_keyboard": [buttons[i:i + 2] for i in range(0, len(buttons), 2)]})
+    path = ROOT / "widgets" / (slug + ".html")
+    api("sendWidget", chat_id=chat["id"], html=path.read_text(), caption=widget.description,
+        reply_markup=navigation(widget.original))
 
 
 def handle_callback(query, api, doom):
@@ -67,9 +127,25 @@ def handle_callback(query, api, doom):
     if chat.get("type") != "private" or chat["id"] != query["from"]["id"]:
         return
     action = query.get("data", "")
-    if action == "catalog" or action.startswith("open:"):
-        text = "/start" if action == "catalog" else "/start " + action[5:]
-        handle({"chat": chat, "from": query["from"], "text": text}, api, doom)
+    ru = (query["from"].get("language_code") or "").lower().startswith("ru")
+    message = query["message"]
+    if action.startswith("open:"):
+        handle({"chat": chat, "from": query["from"], "text": "/start " + action[5:]}, api, doom)
+    elif action in ("catalog", "home"):
+        show_catalog(api, chat["id"], ru, message["message_id"] if action == "home" else None)
+    elif action == "search":
+        prompt = "Напишите название или тему, например «погода»." if ru else "Send a name or topic, for example ‘weather’."
+        menu(api, chat["id"], prompt, [[button("Категории" if ru else "Categories", "home")]], message["message_id"])
+    else:
+        parts = action.split(":")
+        if len(parts) == 3 and parts[0] == "category" and parts[1] in CATEGORIES and parts[2].isdigit():
+            results(api, chat["id"], ru, category=parts[1], page=int(parts[2]), message_id=message["message_id"])
+        elif len(parts) == 2 and parts[0] == "results" and parts[1].isdigit():
+            # The original query stays in the heading, even after a bot restart.
+            heading = message.get("text", "").splitlines()[0]
+            _, separator, term = heading.partition(" · ")
+            if separator:
+                results(api, chat["id"], ru, query=term, page=int(parts[1]), message_id=message["message_id"])
 
 
 def main():
