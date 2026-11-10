@@ -1,0 +1,58 @@
+<style>
+*{box-sizing:border-box}
+body{margin:0;color:#f4f8fc;font:14px/1.35 system-ui,sans-serif;background:linear-gradient(145deg,#1a344f 0%,#244761 55%,#20344f 100%)}
+.card{padding:15px 16px 13px;min-height:322px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.city{font-size:17px;font-weight:700;letter-spacing:-.02em}
+.date{color:#d4e4ef;font-size:11px;text-align:right;line-height:1.4}
+.hero{display:flex;align-items:center;justify-content:space-between;min-height:93px;margin:8px 0 3px}
+.temp{font-size:67px;font-weight:650;letter-spacing:-.07em;line-height:1;font-variant-numeric:tabular-nums}
+.degree{font-size:34px;vertical-align:15px;margin-left:3px}
+.source{color:#d6e7f1;font-size:12px;margin-top:4px}
+.current{width:90px;text-align:center;color:#d9e9f4;font-size:11px}
+.current svg{display:block;margin:0 auto 1px}
+.story{font-size:13px;color:#e5f4fd;margin:7px 0 13px}
+.rule{height:1px;background:#58758b}
+.forecast{display:flex;gap:3px;margin-top:10px}
+.slot{flex:1;min-width:0;border:0;background:transparent;color:#e4edf5;padding:5px 2px 7px;border-radius:10px;font:inherit;text-align:center;cursor:pointer}
+.slot.active{background:#416580;color:#fff}
+.slot .hour{display:block;font-size:12px;font-weight:650;font-variant-numeric:tabular-nums}
+.slot svg{display:block;margin:5px auto 3px}
+.slot .value{display:block;font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}
+.slot .kind{display:block;font-size:10px;color:#d5e8f4}
+.detail{min-height:36px;margin-top:10px;padding:8px 10px;border-radius:8px;background:#16334d;color:#edf7ff;font-size:11px;line-height:1.35}
+.foot{color:#c7dbe9;font-size:11px;margin-top:7px}
+</style>
+<div class="card">
+  <div class="top"><div class="city">Sample City</div><div class="date">Sample day<br>12:00</div></div>
+  <div class="hero"><div><div class="temp">+4<span class="degree">°</span></div><div class="source">Sample readings</div></div><div class="current">
+    <svg width="75" height="64" viewBox="0 0 72 64" aria-hidden="true"><path d="M13 39h42a11 11 0 0 0-2-22 18 18 0 0 0-33 5A9 9 0 0 0 13 39Z" fill="#d5e4ef"/><path d="M22 44v13m-6-6h12m17-7v13m-6-6h12" fill="none" stroke="#e8f5ff" stroke-width="2.3" stroke-linecap="round"/></svg>
+    light snow¹
+  </div></div>
+  <div class="story">Rain this afternoon, snow by evening.</div>
+  <div class="rule"></div>
+  <div class="forecast">
+    <button class="slot active" type="button"><span class="hour">12:00</span><svg width="38" height="36" viewBox="0 0 48 44" aria-hidden="true"><path d="M9 28h29a8 8 0 0 0-2-16 13 13 0 0 0-23 4A7 7 0 0 0 9 28Z" fill="#d5e4ef"/><path d="m15 33-2 6m12-6-2 6m12-6-2 6" stroke="#82d6ff" stroke-width="2.8" stroke-linecap="round"/></svg><span class="value">+1°</span><span class="kind">rain</span></button>
+    <button class="slot" type="button"><span class="hour">15:00</span><svg width="38" height="36" viewBox="0 0 48 44" aria-hidden="true"><path d="M9 28h29a8 8 0 0 0-2-16 13 13 0 0 0-23 4A7 7 0 0 0 9 28Z" fill="#d5e4ef"/><path d="m15 33-2 6m12-6-2 6m12-6-2 6" stroke="#82d6ff" stroke-width="2.8" stroke-linecap="round"/></svg><span class="value">+2°</span><span class="kind">rain</span></button>
+    <button class="slot" type="button"><span class="hour">18:00</span><svg width="38" height="36" viewBox="0 0 48 44" aria-hidden="true"><path d="M9 27h29a8 8 0 0 0-2-16 13 13 0 0 0-23 4A7 7 0 0 0 9 27Z" fill="#d5e4ef"/><path d="M16 31v11m-5-5h10m13-6v11m-5-5h10" stroke="#f4f8ff" stroke-width="1.9" stroke-linecap="round"/></svg><span class="value">+2°</span><span class="kind">snow</span></button>
+    <button class="slot" type="button"><span class="hour">21:00</span><svg width="38" height="36" viewBox="0 0 48 44" aria-hidden="true"><path d="M9 27h29a8 8 0 0 0-2-16 13 13 0 0 0-23 4A7 7 0 0 0 9 27Z" fill="#d5e4ef"/><path d="M16 31v11m-5-5h10m13-6v11m-5-5h10" stroke="#f4f8ff" stroke-width="1.9" stroke-linecap="round"/></svg><span class="value">+2°</span><span class="kind">snow</span></button>
+  </div>
+  <div id="detail" class="detail">12:00 · light rain · precipitation 28% · wind 4.7 m/s</div>
+  <div class="foot">¹ All readings and forecasts are fictional</div>
+</div>
+<script>
+const rows=[
+  "12:00 · light rain · precipitation 28% · wind 4.7 m/s",
+  "15:00 · light rain · precipitation 20% · wind 4.8 m/s",
+  "18:00 · light snow · precipitation 31% · wind 3.9 m/s",
+  "21:00 · light snow · precipitation 20% · wind 3.9 m/s"
+];
+const buttons=document.querySelectorAll('.slot'), detail=document.getElementById('detail');
+for(let i=0;i<buttons.length;i++){
+  buttons[i].addEventListener('click',()=>{
+    for(let j=0;j<buttons.length;j++) buttons[j].classList.remove('active');
+    buttons[i].classList.add('active');
+    detail.textContent=rows[i];
+  });
+}
+</script>

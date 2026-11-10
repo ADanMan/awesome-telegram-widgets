@@ -30,3 +30,15 @@ A hand-picked collection of little apps built with Telegram’s HTML widget form
 [Suggest a widget](https://github.com/ADanMan/awesome-telegram-widgets/issues/new?template=suggest-widget.md) or open a pull request with one directory row. Include the creator’s public link, what a person can do inside the message, and how to try it. A public bot, playable demo or inspectable widget source all qualify. Mention any setup or sample data.
 
 An independent community collection. Each linked project keeps its own license.
+
+## Run Widget Arcade
+
+Widget Arcade is the English-language companion bot. Send `/start` in a private chat to open its five-entry menu. Weather card and Commute picker run inside messages. Pacman, Calculator and Pocket inbox open the creator’s project.
+
+Create a bot with [BotFather](https://t.me/BotFather). Save its token in the owner-only file `~/.config/awesome-telegram-widgets/token` or set `TELEGRAM_BOT_TOKEN`. From the repository root run:
+
+```sh
+python3 bot/catalog.py
+```
+
+Keep one process running while serving the bot. The two bundled English demos adapt [Telegram Widget Lab](https://github.com/VyacheslavTeplyakov/telegram-widget-lab/tree/3c4fb0cd5cbb40d7e421dc217585b463859f4626) under its [MIT license](bot/widgets/LICENSE-widget-lab).

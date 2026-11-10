@@ -1,0 +1,71 @@
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(150deg,#193c3e,#173036 72%,#152b33);color:#f4f8f5;font:14px/1.35 system-ui,sans-serif}
+.card{padding:16px 16px 14px}
+.top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.title{font-size:17px;font-weight:700;letter-spacing:-.02em}
+.stamp{font-size:11px;text-align:right;color:#d2e5df;line-height:1.4}
+.hero{display:flex;justify-content:space-between;align-items:center;min-height:138px;margin-top:7px}
+.number{font-size:76px;letter-spacing:-.04em;font-weight:700;line-height:.99;font-variant-numeric:tabular-nums}
+.unit{font-size:21px;font-weight:600;margin-left:4px}
+.hero-sub{color:#d9ede3;font-size:12px;margin-top:8px}
+.diagram{width:125px;text-align:center;color:#c5ded8;font-size:10px}
+.diagram svg{display:block;margin:0 auto}
+.line{fill:none;stroke:#5a7977;stroke-width:3;stroke-linecap:round}
+.line.active{stroke:#ffdc92;stroke-width:4}
+.section{font-size:13px;font-weight:650;color:#e8f6ee;margin:5px 0 8px}
+.list{display:flex;flex-direction:column;gap:6px}
+.option{display:flex;align-items:center;gap:10px;width:100%;min-height:47px;border:0;border-radius:11px;padding:6px 10px;background:#25464a;color:#f4f8f5;text-align:left;font:inherit;cursor:pointer}
+.option.active{background:#39605e}
+.option .index{font-size:12px;font-weight:700;color:#f8de9d;width:24px}
+.option .measure{flex:1;display:flex;align-items:baseline;gap:8px}
+.option strong{font-size:16px;font-weight:700;font-variant-numeric:tabular-nums}
+.option small{font-size:11px;color:#d5e7e1;font-variant-numeric:tabular-nums}
+.option .extra{font-size:11px;color:#e7d7b7;text-align:right}
+.detail{min-height:33px;padding:8px 0 0;color:#f3e4c5;font-size:11px}
+.foot{font-size:11px;color:#c9ddd8;margin-top:5px}
+</style>
+<div class="card">
+  <div class="top"><div class="title">Point A to Point B</div><div class="stamp">Sample day<br>12:00</div></div>
+  <div class="hero"><div><div><span id="num" class="number">12</span><span class="unit">min</span></div><div id="hero-sub" class="hero-sub">6.1 km · fastest route</div></div><div class="diagram">
+    <svg width="120" height="104" viewBox="0 0 124 105" aria-hidden="true">
+      <path class="line active" d="M14 87 C39 75 51 68 68 49 S96 24 111 18"/>
+      <path class="line" d="M14 87 C30 50 53 87 72 64 S92 33 111 18"/>
+      <path class="line" d="M14 87 C41 93 31 41 72 38 S101 34 111 18"/>
+      <circle cx="14" cy="87" r="5" fill="#d7ede6"/>
+      <circle cx="111" cy="18" r="6" fill="#ffdc92"/>
+    </svg>
+    route overview
+  </div></div>
+  <div class="section">Choose a route</div>
+  <div class="list">
+    <button type="button" class="option active"><span class="index">01</span><span class="measure"><strong>12 min</strong><small>6.1 km</small></span><span class="extra">fastest</span></button>
+    <button type="button" class="option"><span class="index">02</span><span class="measure"><strong>16 min</strong><small>7.6 km</small></span><span class="extra">+4 min</span></button>
+    <button type="button" class="option"><span class="index">03</span><span class="measure"><strong>17 min</strong><small>8.3 km</small></span><span class="extra">+5 min</span></button>
+  </div>
+  <div id="detail" class="detail">The fastest of the three routes.</div>
+  <div class="foot">Fictional routes and sample travel times</div>
+</div>
+<script>
+const options=document.querySelectorAll('.option');
+const lines=document.querySelectorAll('.line');
+const durations=['12','16','17'];
+const descriptions=[
+  ['6.1 km · fastest route','The fastest of the three routes.'],
+  ['7.6 km · route 2','4 minutes longer and 1.5 km farther.'],
+  ['8.3 km · route 3','5 minutes longer and 2.2 km farther.']
+];
+for(let i=0;i<options.length;i++){
+  options[i].addEventListener('click',()=>{
+    for(let j=0;j<options.length;j++){
+      options[j].classList.remove('active');
+      lines[j].classList.remove('active');
+    }
+    options[i].classList.add('active');
+    lines[i].classList.add('active');
+    document.getElementById('num').textContent=durations[i];
+    document.getElementById('hero-sub').textContent=descriptions[i][0];
+    document.getElementById('detail').textContent=descriptions[i][1];
+  });
+}
+</script>
