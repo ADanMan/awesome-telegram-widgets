@@ -15,6 +15,7 @@ A hand-picked collection of little apps built with Telegram’s HTML widget form
 | **Weather card** | Switch between sample forecasts to see how conditions change. Uses demo weather data. | [Widget HTML](https://github.com/VyacheslavTeplyakov/telegram-widget-lab/blob/main/examples/04-weather.html) |
 | **Commute picker** | Compare three example routes inside a single message. Uses fictional trips. | [Widget HTML](https://github.com/VyacheslavTeplyakov/telegram-widget-lab/blob/main/examples/05-commute.html) |
 | **Pocket inbox** | Page through sample emails. A companion bot serves the next page when you tap. | [Widget HTML](https://github.com/VyacheslavTeplyakov/telegram-widget-lab/blob/main/examples/07-mail-live.html) · [Demo bot setup](https://github.com/VyacheslavTeplyakov/telegram-widget-lab) |
+| **Doom Message** | Play Doom’s E1M1 Hangar. Turn, walk, fire and open doors inside a message. ViZDoom runs on the creator’s bot. | [Play in Telegram](https://t.me/ADanManDoomMessageBot?start=hangar) · [Source](https://github.com/ADanMan/telegram-doom-widget) |
 
 **Trying a source example?** Open its project for setup instructions. To display widget HTML inside Telegram, a bot sends it with [sendWidget](https://core.telegram.org/bots/api#sendwidget). For a first test, use a private chat with your bot.
 
@@ -25,15 +26,19 @@ A hand-picked collection of little apps built with Telegram’s HTML widget form
 - [TG Widget Kit](https://github.com/advanceddev/telegram-widget-kit) lets you edit HTML, CSS and JavaScript with a live bubble preview and compressed-size readout.
 - [widgetgram](https://github.com/krendel001/widgetgram) adds widget sending and query handlers to Python bots built with aiogram 3.
 
+The Doom Message menu entry opens the dedicated game bot, which hosts each player’s game.
+
 ## Add a find
 
 [Suggest a widget](https://github.com/ADanMan/awesome-telegram-widgets/issues/new?template=suggest-widget.md) or open a pull request with one directory row. Include the creator’s public link, what a person can do inside the message, and how to try it. A public bot, playable demo or inspectable widget source all qualify. Mention any setup or sample data.
+
+See the [contribution guidelines](CONTRIBUTING.md) for submissions, screenshots and bundling.
 
 An independent community collection. Each linked project keeps its own license.
 
 ## Run AwesomeWidgetBot
 
-[Open @awesomewidget_bot in Telegram](https://t.me/awesomewidget_bot). AwesomeWidgetBot is the English-language companion bot. Send `/start` in a private chat to open its five-entry menu. All five widgets run inside Telegram messages. The bot includes its own English implementations of Pacman (a turn-based maze), Calculator and Pocket inbox (three fictional messages you can page through).
+[Open @awesomewidget_bot in Telegram](https://t.me/awesomewidget_bot). AwesomeWidgetBot is the English-language companion bot. Send `/start` in a private chat to open its menu. The five bundled widgets run inside Telegram messages. The bot includes its own English implementations of Pacman (a turn-based maze), Calculator and Pocket inbox (three fictional messages you can page through).
 
 Create a bot with [BotFather](https://t.me/BotFather). Save its token in the owner-only file `~/.config/awesome-telegram-widgets/token` or set `TELEGRAM_BOT_TOKEN`. From the repository root run:
 

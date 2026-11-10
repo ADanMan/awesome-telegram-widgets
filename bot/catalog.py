@@ -24,6 +24,10 @@ def handle(message, api):
     if chat["type"] != "private" or not message.get("text"):
         return
     name = message["text"].strip()
+    if name == "Doom Message":
+        api("sendMessage", chat_id=chat["id"], text="Play E1M1 inside the Doom Message bot.",
+            reply_markup={"inline_keyboard": [[{"text": "Play Doom", "url": "https://t.me/ADanManDoomMessageBot?start=hangar"}]]})
+        return
     for slug, (title, description, url) in WIDGETS.items():
         if name != title:
             continue
@@ -32,8 +36,9 @@ def handle(message, api):
         api("sendWidget", chat_id=chat["id"], html=path.read_text(), caption=description, reply_markup=source)
         return
     keyboard = [[{"text": item[0]}] for item in WIDGETS.values()]
+    keyboard.append([{"text": "Doom Message"}])
     api("sendMessage", chat_id=chat["id"],
-        text="AwesomeWidgetBot\n\nChoose a widget to open it here in the chat.",
+        text="AwesomeWidgetBot\n\nChoose a widget. Doom opens in its dedicated game bot.",
         reply_markup={"keyboard": keyboard, "resize_keyboard": True})
 
 
