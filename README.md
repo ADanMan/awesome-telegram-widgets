@@ -17,6 +17,8 @@ A hand-picked collection of little apps built with Telegram’s HTML widget form
 | **Pocket inbox** | Page through sample emails. A companion bot serves the next page when you tap. | [Widget HTML](https://github.com/VyacheslavTeplyakov/telegram-widget-lab/blob/main/examples/07-mail-live.html) · [Demo bot setup](https://github.com/VyacheslavTeplyakov/telegram-widget-lab) |
 | **Doom Message** | Play Doom’s E1M1 Hangar. Turn, walk, fire and open doors inside a message. The bot runs ViZDoom and streams each turn back to the message. | [Play in Telegram](https://t.me/ADanManDoomMessageBot?start=hangar) · [Source](https://github.com/ADanMan/telegram-doom-widget) |
 
+<img src="assets/doom-in-chat.png" width="300" alt="Doom running inside AwesomeWidgetBot after a right turn on Telegram for macOS">
+
 **Trying a source example?** Open its project for setup instructions. To display widget HTML inside Telegram, a bot sends it with [sendWidget](https://core.telegram.org/bots/api#sendwidget). For a first test, use a private chat with your bot.
 
 ## Builder’s workbench
