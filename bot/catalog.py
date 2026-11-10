@@ -1,4 +1,4 @@
-"""Run Widget Arcade with Python 3 and a token from BotFather."""
+"""Run AwesomeWidgetBot with Python 3 and a token from BotFather."""
 import json
 import os
 import sys
@@ -36,7 +36,7 @@ def handle(message, api):
         return
     keyboard = [[{"text": item[0]}] for item in WIDGETS.values()]
     api("sendMessage", chat_id=chat["id"],
-        text="Widget Arcade\n\nTry Weather card or Commute picker right here. Choose another title for its project and setup instructions.",
+        text="AwesomeWidgetBot\n\nTry Weather card or Commute picker right here. Choose another title for its project and setup instructions.",
         reply_markup={"keyboard": keyboard, "resize_keyboard": True})
 
 

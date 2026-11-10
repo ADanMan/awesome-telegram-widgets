@@ -31,9 +31,9 @@ A hand-picked collection of little apps built with Telegram’s HTML widget form
 
 An independent community collection. Each linked project keeps its own license.
 
-## Run Widget Arcade
+## Run AwesomeWidgetBot
 
-Widget Arcade is the English-language companion bot. Send `/start` in a private chat to open its five-entry menu. Weather card and Commute picker run inside messages. Pacman, Calculator and Pocket inbox open the creator’s project.
+AwesomeWidgetBot (`@awesomewidget_bot`) is the English-language companion bot. Send `/start` in a private chat to open its five-entry menu. Weather card and Commute picker run inside messages. Pacman, Calculator and Pocket inbox open the creator’s project.
 
 Create a bot with [BotFather](https://t.me/BotFather). Save its token in the owner-only file `~/.config/awesome-telegram-widgets/token` or set `TELEGRAM_BOT_TOKEN`. From the repository root run:
 
