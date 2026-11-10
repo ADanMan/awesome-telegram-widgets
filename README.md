@@ -15,7 +15,7 @@ A hand-picked collection of little apps built with Telegram’s HTML widget form
 | **Weather card** | Switch between sample forecasts to see how conditions change. Uses demo weather data. | [Widget HTML](https://github.com/VyacheslavTeplyakov/telegram-widget-lab/blob/main/examples/04-weather.html) |
 | **Commute picker** | Compare three example routes inside a single message. Uses fictional trips. | [Widget HTML](https://github.com/VyacheslavTeplyakov/telegram-widget-lab/blob/main/examples/05-commute.html) |
 | **Pocket inbox** | Page through sample emails. A companion bot serves the next page when you tap. | [Widget HTML](https://github.com/VyacheslavTeplyakov/telegram-widget-lab/blob/main/examples/07-mail-live.html) · [Demo bot setup](https://github.com/VyacheslavTeplyakov/telegram-widget-lab) |
-| **Doom Message** | Play Doom’s E1M1 Hangar. Turn, walk, fire and open doors inside a message. ViZDoom runs on the creator’s bot. | [Play in Telegram](https://t.me/ADanManDoomMessageBot?start=hangar) · [Source](https://github.com/ADanMan/telegram-doom-widget) |
+| **Doom Message** | Play Doom’s E1M1 Hangar. Turn, walk, fire and open doors inside a message. The bot runs ViZDoom and streams each turn back to the message. | [Play in Telegram](https://t.me/ADanManDoomMessageBot?start=hangar) · [Source](https://github.com/ADanMan/telegram-doom-widget) |
 
 **Trying a source example?** Open its project for setup instructions. To display widget HTML inside Telegram, a bot sends it with [sendWidget](https://core.telegram.org/bots/api#sendwidget). For a first test, use a private chat with your bot.
 
@@ -36,7 +36,9 @@ An independent community collection. Each linked project keeps its own license.
 
 ## Run AwesomeWidgetBot
 
-[Open @awesomewidget_bot in Telegram](https://t.me/awesomewidget_bot). AwesomeWidgetBot is the English-language companion bot. Send `/start` in a private chat to open its menu. The five bundled widgets run inside Telegram messages. The bot includes its own English implementations of Pacman (a turn-based maze), Calculator and Pocket inbox (three fictional messages you can page through).
+[Open @awesomewidget_bot in Telegram](https://t.me/awesomewidget_bot). AwesomeWidgetBot is the English-language companion bot. Send `/start` in a private chat to open its menu. All six entries in the public bot run inside Telegram messages. The bot includes its own English implementations of Pacman (a turn-based maze), Calculator and Pocket inbox (three fictional messages you can page through).
+
+On Telegram for macOS 13.2.0, the calculator returned 9 for 7 + 2, Pacman counted the first dot, and Pocket inbox advanced to the second message. The weather card switched to 18:00 and the commute picker selected the 16-minute route.
 
 Create a bot with [BotFather](https://t.me/BotFather). Save its token in the owner-only file `~/.config/awesome-telegram-widgets/token` or set `TELEGRAM_BOT_TOKEN`. From the repository root run:
 
