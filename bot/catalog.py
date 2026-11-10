@@ -13,9 +13,9 @@ LAB = "https://github.com/VyacheslavTeplyakov/telegram-widget-lab"
 WIDGETS = {
     "weather": ("Weather card", "Tap an hour to explore a sample forecast.", LAB + "/blob/main/examples/04-weather.html"),
     "commute": ("Commute picker", "Compare three fictional routes and their travel times.", LAB + "/blob/main/examples/05-commute.html"),
-    "pacman": ("Pacman", "Collect dots with the arrow buttons. Avoid the ghost.", REPO + "/blob/main/bot/widgets/pacman.html"),
-    "calculator": ("Calculator", "Tap the keypad to calculate. Clear starts a new calculation.", REPO + "/blob/main/bot/widgets/calculator.html"),
-    "inbox": ("Pocket inbox", "Read three fictional emails with Previous and Next.", REPO + "/blob/main/bot/widgets/inbox.html"),
+    "pacman": ("Pacman", "Collect dots with the arrow buttons. Avoid the ghost.", "https://github.com/ronakserry/pacman"),
+    "calculator": ("Calculator", "Tap the keypad to calculate. Clear starts a new calculation.", "https://github.com/Hamedshahi5/telegram-widgets/blob/main/calculator.html"),
+    "inbox": ("Pocket inbox", "Read three fictional emails with Previous and Next.", LAB + "/blob/main/examples/07-mail-live.html"),
 }
 
 
@@ -32,19 +32,23 @@ def handle(message, api, doom=None):
             name = WIDGETS[slug][0]
     russian = (message.get("from", {}).get("language_code") or "").lower().startswith("ru")
     more = {"text": "Ещё виджеты" if russian else "More widgets", "callback_data": "catalog"}
+    def navigation(original_url):
+        original = {"text": "Оригинал" if russian else "Original project", "url": original_url}
+        return {"inline_keyboard": [[more, original]]}
+
     if name == "Doom Message":
+        markup = navigation("https://github.com/ADanMan/telegram-doom-widget")
         if doom is not None:
-            doom.send(api, chat["id"], reply_markup={"inline_keyboard": [[more]]})
+            doom.send(api, chat["id"], reply_markup=markup)
             return
-        api("sendMessage", chat_id=chat["id"], text="Play E1M1 inside the Doom Message bot.",
-            reply_markup={"inline_keyboard": [[{"text": "Play Doom", "url": "https://t.me/ADanManDoomMessageBot?start=hangar"}], [more]]})
+        markup["inline_keyboard"].insert(0, [{"text": "Play Doom", "url": "https://t.me/ADanManDoomMessageBot?start=hangar"}])
+        api("sendMessage", chat_id=chat["id"], text="Play E1M1 inside the Doom Message bot.", reply_markup=markup)
         return
     for slug, (title, description, url) in WIDGETS.items():
         if name != title:
             continue
-        source = {"inline_keyboard": [[more], [{"text": "Creator's project", "url": url}]]}
         path = ROOT / "widgets" / (slug + ".html")
-        api("sendWidget", chat_id=chat["id"], html=path.read_text(), caption=description, reply_markup=source)
+        api("sendWidget", chat_id=chat["id"], html=path.read_text(), caption=description, reply_markup=navigation(url))
         return
     show_catalog(api, chat["id"], russian)
 

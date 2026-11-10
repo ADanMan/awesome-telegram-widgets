@@ -6,7 +6,9 @@ title: "Add widget — "
 
 **Widget name and creator**
 
-**Public bot, demo or source URL**
+**Original creator’s project, bot or widget URL (required)**
+
+For an adaptation, link the upstream original here. You can include a separate demo link.
 
 **What can someone do inside the message?**
 
