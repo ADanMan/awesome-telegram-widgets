@@ -19,12 +19,15 @@ WIDGETS = {
 }
 
 
-def handle(message, api):
+def handle(message, api, doom=None):
     chat = message["chat"]
     if chat["type"] != "private" or not message.get("text"):
         return
     name = message["text"].strip()
     if name == "Doom Message":
+        if doom is not None:
+            doom.send(api, chat["id"])
+            return
         api("sendMessage", chat_id=chat["id"], text="Play E1M1 inside the Doom Message bot.",
             reply_markup={"inline_keyboard": [[{"text": "Play Doom", "url": "https://t.me/ADanManDoomMessageBot?start=hangar"}]]})
         return
@@ -38,7 +41,7 @@ def handle(message, api):
     keyboard = [[{"text": item[0]}] for item in WIDGETS.values()]
     keyboard.append([{"text": "Doom Message"}])
     api("sendMessage", chat_id=chat["id"],
-        text="AwesomeWidgetBot\n\nChoose a widget. Doom opens in its dedicated game bot.",
+        text="AwesomeWidgetBot\n\nChoose a game or tool below.",
         reply_markup={"keyboard": keyboard, "resize_keyboard": True})
 
 
@@ -54,13 +57,23 @@ def main():
         with urlopen(request, timeout=45) as response:
             return json.load(response)["result"]
 
+    doom = None
+    if os.environ.get("DOOM_WIDGET_DIR"):
+        sys.path.insert(0, os.environ["DOOM_WIDGET_DIR"])
+        from widget_game import DoomWidget
+        doom = DoomWidget(os.environ["DOOM_WAD"])
+    updates = ["message", "widget_query"] if doom else ["message"]
     offset = 0
     while True:
         try:
-            for update in api("getUpdates", timeout=25, offset=offset, allowed_updates=["message"]):
+            if doom:
+                doom.expire()
+            for update in api("getUpdates", timeout=25, offset=offset, allowed_updates=updates):
                 try:
                     if "message" in update:
-                        handle(update["message"], api)
+                        handle(update["message"], api, doom)
+                    elif doom and "widget_query" in update:
+                        doom.answer(api, update["widget_query"])
                 except HTTPError as error:
                     if error.code not in (400, 403):
                         raise

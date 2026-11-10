@@ -26,8 +26,6 @@ A hand-picked collection of little apps built with Telegram’s HTML widget form
 - [TG Widget Kit](https://github.com/advanceddev/telegram-widget-kit) lets you edit HTML, CSS and JavaScript with a live bubble preview and compressed-size readout.
 - [widgetgram](https://github.com/krendel001/widgetgram) adds widget sending and query handlers to Python bots built with aiogram 3.
 
-The Doom Message menu entry opens the dedicated game bot, which hosts each player’s game.
-
 ## Add a find
 
 [Suggest a widget](https://github.com/ADanMan/awesome-telegram-widgets/issues/new?template=suggest-widget.md) or open a pull request with one directory row. Include the creator’s public link, what a person can do inside the message, and how to try it. A public bot, playable demo or inspectable widget source all qualify. Mention any setup or sample data.
@@ -45,5 +43,7 @@ Create a bot with [BotFather](https://t.me/BotFather). Save its token in the own
 ```sh
 python3 bot/catalog.py
 ```
+
+To host Doom inside your catalog bot, clone [Doom Message](https://github.com/ADanMan/telegram-doom-widget), install its requirements in the bot’s Python environment, set `DOOM_WIDGET_DIR` to that checkout and `DOOM_WAD` to your Doom Shareware 1.9 WAD. Without this optional backend, the Doom menu entry opens the dedicated game bot.
 
 Keep one process running while serving the bot. The two bundled English demos adapt [Telegram Widget Lab](https://github.com/VyacheslavTeplyakov/telegram-widget-lab/tree/3c4fb0cd5cbb40d7e421dc217585b463859f4626) under its [MIT license](bot/widgets/LICENSE-widget-lab).
