@@ -4,7 +4,7 @@
 
 **English** · [Русский](README.ru.md)
 
-Open [@awesomewidget_bot](https://t.me/awesomewidget_bot), tap **Start**, then **Doom Message**. You can walk through the original Hangar, open doors and fire from the buttons underneath the frame. The engine runs on the bot’s host and returns a new frame after each move.
+Open [Doom in Telegram](https://t.me/awesomewidget_bot?start=doom) and tap **Start**. Use **More widgets** below the game to browse the collection. You can walk through the original Hangar, open doors and fire from the buttons underneath the frame. The engine runs on the bot’s host and returns a new frame after each move.
 
 A hand-picked collection of little apps built with Telegram’s HTML widget format. The game board, calculator or forecast lives inside a chat message. Each entry links to its creator’s project or widget file.
 
