@@ -111,7 +111,7 @@ def handle(message, api, doom=None):
     if slug == "doom":
         markup = navigation(widget.original)
         if doom is not None:
-            doom.send(api, chat["id"], reply_markup=markup)
+            doom.send(api, chat["id"], reply_markup=markup, language_code=message.get("from", {}).get("language_code"))
             return
         markup["inline_keyboard"].insert(0, [{"text": "Play Doom", "url": "https://t.me/ADanManDoomMessageBot?start=hangar"}])
         api("sendMessage", chat_id=chat["id"], text="Play E1M1 inside the Doom Message bot.", reply_markup=markup)
