@@ -1,0 +1,42 @@
+<style>
+body{padding:12px;background:#132438;color:#fff;font:15px sans-serif}
+pre{font:20px/1.1 monospace;color:#ffd359;margin:8px 0;white-space:pre}
+button{padding:7px 9px;margin-right:2px}
+</style>
+<strong>Pacman</strong> · <span id="score">Точки: 0</span>
+<pre id="maze"></pre>
+<button id="left">◀</button><button id="up">▲</button><button id="down">▼</button><button id="right">▶</button><button id="reset">Заново</button>
+<script>
+const layout=['#########','#.......#','#.##.##.#','#.......#','#.##.##.#','#.......#','#########'];
+const directions=[[-1,0],[0,-1],[0,1],[1,0]];
+let board,px,py,gx,gy,score,remaining,over;
+function render(){
+ document.getElementById('maze').textContent=board.map((row,y)=>row.map((tile,x)=>{
+   if(x===gx && y===gy) return 'G';
+   if(x===px && y===py) return 'C';
+   return tile==='#'?'▓':tile==='.'?'·':' ';
+ }).join('')).join('\n');
+ document.getElementById('score').textContent=over || 'Точки: '+score;
+}
+function reset(){
+ board=layout.map(row=>row.split(''));px=1;py=1;gx=7;gy=5;
+ board[py][px]=' ';score=0;over='';remaining=board.reduce((n,row)=>n+row.filter(t=>t==='.').length,0);render();
+}
+function move(dx,dy){
+ if(over || board[py+dy][px+dx]==='#') return;
+ px+=dx;py+=dy;
+ if(board[py][px]==='.'){board[py][px]=' ';score++;}
+ if(px===gx && py===gy) over='Попались! Начните заново';
+ else if(score===remaining) over='Лабиринт пройден!';
+ else{
+   const options=directions.filter(d=>board[gy+d[1]][gx+d[0]]!=='#');
+   const d=options[Math.floor(Math.random()*options.length)];
+   gx+=d[0];gy+=d[1];
+   if(px===gx && py===gy) over='Попались! Начните заново';
+ }
+ render();
+}
+['left','up','down','right'].forEach((id,i)=>document.getElementById(id).addEventListener('click',()=>move(directions[i][0],directions[i][1])));
+document.getElementById('reset').addEventListener('click',reset);
+reset();
+</script>

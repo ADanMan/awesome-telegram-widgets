@@ -4,7 +4,7 @@
 
 **English** · [Русский](README.ru.md)
 
-Send `/start` for the English catalog or `/ru` for Russian.
+The catalog follows your Telegram language (Russian or English, with English as the fallback). Use `/en` or `/ru` to override it, or `/start` to switch back to automatic selection.
 
 Open [Doom in Telegram](https://t.me/awesomewidget_bot?start=doom) and tap **Start**. Use **More widgets** below the game to browse the collection. You can walk through the original Hangar, open doors and fire from the buttons underneath the frame. The engine runs on the bot’s host and returns a new frame after each move. Browse **Games** and **Tools**, or send a name or keyword in English or Russian. Results show up to six widgets per page.
 
@@ -46,7 +46,7 @@ An independent community collection. Each linked project keeps its own license.
 
 ## Run AwesomeWidgetBot
 
-[Open @awesomewidget_bot in Telegram](https://t.me/awesomewidget_bot). AwesomeWidgetBot is the English-language companion bot. Send `/start` in a private chat to open its menu. All six entries in the public bot run inside Telegram messages. The bot includes its own English implementations of Pacman (a turn-based maze), Calculator and Pocket inbox (three fictional messages you can page through).
+[Open @awesomewidget_bot in Telegram](https://t.me/awesomewidget_bot). AwesomeWidgetBot is the companion bot. Send `/start` in a private chat to open its menu. All six entries in the public bot run inside Telegram messages. The bot includes its own implementations of Pacman (a turn-based maze), Calculator and Pocket inbox (three fictional messages you can page through).
 
 On Telegram for macOS 13.2.0, the calculator returned 9 for 7 + 2, Pacman counted the first dot, and Pocket inbox advanced to the second message. The weather card switched to 18:00 and the commute picker selected the 16-minute route.
 

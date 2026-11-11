@@ -18,18 +18,25 @@ class Widget:
     keywords: str
     description: str
     original: str
+    ru_title: str
+    ru_description: str
 
 
 CATEGORIES = {"games": ("Games", "Игры"), "tools": ("Tools", "Инструменты")}
 PAGE_SIZE = 6
-RUSSIAN_CHATS = set()
+LANGUAGE_OVERRIDES = {}
+
+
+def russian_for(chat_id, sender):
+    return LANGUAGE_OVERRIDES.get(chat_id, (sender.get("language_code") or "").lower().split("-")[0] == "ru")
+
 WIDGETS = {
-    "doom": Widget("Doom Message", "games", "дум шутер shooter hangar", "Play E1M1 in the chat.", "https://github.com/ADanMan/telegram-doom-widget"),
-    "pacman": Widget("Pacman", "games", "pac-man пакман пакмен аркада лабиринт maze arcade", "Collect dots with the arrow buttons. Avoid the ghost.", "https://github.com/ronakserry/pacman"),
-    "calculator": Widget("Calculator", "tools", "калькулятор расчёт арифметика maths", "Tap the keypad to calculate. Clear starts a new calculation.", "https://github.com/Hamedshahi5/telegram-widgets/blob/main/calculator.html"),
-    "weather": Widget("Weather card", "tools", "погода прогноз осадки forecast", "Tap an hour to explore a sample forecast.", LAB + "/blob/main/examples/04-weather.html"),
-    "commute": Widget("Commute picker", "tools", "маршрут дорога транспорт route travel", "Compare three fictional routes and their travel times.", LAB + "/blob/main/examples/05-commute.html"),
-    "inbox": Widget("Pocket inbox", "tools", "почта письма ящик email mail", "Read three fictional emails with Previous and Next.", LAB + "/blob/main/examples/07-mail-live.html"),
+    "doom": Widget("Doom Message", "games", "дум шутер shooter hangar", "Play E1M1 in the chat.", "https://github.com/ADanMan/telegram-doom-widget", "Doom Message", "Сыграйте в E1M1 прямо в чате."),
+    "pacman": Widget("Pacman", "games", "pac-man пакман пакмен аркада лабиринт maze arcade", "Collect dots with the arrow buttons. Avoid the ghost.", "https://github.com/ronakserry/pacman", "Pacman", "Собирайте точки и избегайте призрака."),
+    "calculator": Widget("Calculator", "tools", "калькулятор расчёт арифметика maths", "Tap the keypad to calculate. Clear starts a new calculation.", "https://github.com/Hamedshahi5/telegram-widgets/blob/main/calculator.html", "Калькулятор", "Нажимайте кнопки для вычислений."),
+    "weather": Widget("Weather card", "tools", "погода прогноз осадки forecast", "Tap an hour to explore a sample forecast.", LAB + "/blob/main/examples/04-weather.html", "Погода", "Выберите время, чтобы посмотреть пример прогноза."),
+    "commute": Widget("Commute picker", "tools", "маршрут дорога транспорт route travel", "Compare three fictional routes and their travel times.", LAB + "/blob/main/examples/05-commute.html", "Маршруты", "Сравните время в пути по трём вымышленным маршрутам."),
+    "inbox": Widget("Pocket inbox", "tools", "почта письма ящик email mail", "Read three fictional emails with Previous and Next.", LAB + "/blob/main/examples/07-mail-live.html", "Почта", "Листайте три письма кнопками «Назад» и «Далее»."),
 }
 
 
@@ -63,7 +70,7 @@ def results(api, chat_id, ru, category=None, query="", page=0, message_id=None):
             continue
         terms = normalize(" ".join((slug, widget.title, widget.keywords, *CATEGORIES[widget.category])))
         if all(word in terms for word in words):
-            matches.append(button(widget.title, "open:" + slug))
+            matches.append(button(widget.ru_title if ru else widget.title, "open:" + slug))
     pages = max(1, (len(matches) + PAGE_SIZE - 1) // PAGE_SIZE)
     page = min(max(0, page), pages - 1)
     visible = matches[page * PAGE_SIZE:(page + 1) * PAGE_SIZE]
@@ -89,15 +96,12 @@ def handle(message, api, doom=None):
         return
     name = message["text"].strip()
     chat_id = chat["id"]
-    if name in ("/ru", "/start ru"):
-        RUSSIAN_CHATS.add(chat_id)
-        show_catalog(api, chat_id, True)
-        return
-    if name in ("/en", "/start") or name.startswith("/start "):
-        RUSSIAN_CHATS.discard(chat_id)
-    if name == "/en":
+    if name in ("/ru", "/en", "/start ru", "/start en"):
+        LANGUAGE_OVERRIDES[chat_id] = name.endswith("ru")
         name = "/start"
-    russian = chat_id in RUSSIAN_CHATS
+    elif name == "/start" or name.startswith("/start "):
+        LANGUAGE_OVERRIDES.pop(chat_id, None)
+    russian = russian_for(chat_id, message.get("from", {}))
     parts = name.split(maxsplit=1)
     if not parts:
         return
@@ -107,7 +111,7 @@ def handle(message, api, doom=None):
             show_catalog(api, chat["id"], russian)
             return
     else:
-        slug = next((key for key, widget in WIDGETS.items() if name == widget.title), None)
+        slug = next((key for key, widget in WIDGETS.items() if name in (widget.title, widget.ru_title)), None)
         if slug is None:
             results(api, chat["id"], russian, query=" ".join(name.split())[:256])
             return
@@ -123,11 +127,11 @@ def handle(message, api, doom=None):
         if doom is not None:
             doom.send(api, chat["id"], reply_markup=markup, language_code="ru" if russian else "en")
             return
-        markup["inline_keyboard"].insert(0, [{"text": "Play Doom", "url": "https://t.me/ADanManDoomMessageBot?start=hangar"}])
-        api("sendMessage", chat_id=chat["id"], text="Play E1M1 inside the Doom Message bot.", reply_markup=markup)
+        markup["inline_keyboard"].insert(0, [{"text": "Играть в Doom" if russian else "Play Doom", "url": "https://t.me/ADanManDoomMessageBot?start=" + ("ru" if russian else "en")}])
+        api("sendMessage", chat_id=chat["id"], text="Сыграйте в E1M1 в боте Doom Message." if russian else "Play E1M1 inside the Doom Message bot.", reply_markup=markup)
         return
-    path = ROOT / "widgets" / (slug + ".html")
-    api("sendWidget", chat_id=chat["id"], html=path.read_text(), caption=widget.description,
+    path = ROOT / "widgets" / (slug + (".ru.html" if russian else ".html"))
+    api("sendWidget", chat_id=chat["id"], html=path.read_text(), caption=widget.ru_description if russian else widget.description,
         reply_markup=navigation(widget.original))
 
 
@@ -137,7 +141,7 @@ def handle_callback(query, api, doom):
     if chat.get("type") != "private" or chat["id"] != query["from"]["id"]:
         return
     action = query.get("data", "")
-    ru = chat["id"] in RUSSIAN_CHATS
+    ru = russian_for(chat["id"], query["from"])
     message = query["message"]
     if action.startswith("open:") and action[5:] in WIDGETS:
         handle({"chat": chat, "from": query["from"], "text": WIDGETS[action[5:]].title}, api, doom)

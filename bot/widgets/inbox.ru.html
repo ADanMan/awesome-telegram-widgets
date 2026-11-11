@@ -1,0 +1,24 @@
+<style>
+body{padding:14px;color:#18302d;background:#eaf4ef;font:15px sans-serif}
+h3{margin:10px 0} p{min-height:52px} button{padding:8px;margin-right:5px}
+</style>
+<strong>Почта</strong> · пример писем
+<h3 id="subject">Ключи от студии</h3><small id="sender">Алекс · 1 из 3</small>
+<p id="body">Запасные ключи у администратора. Заберите их до шести.</p>
+<button id="prev">Назад</button><button id="next">Далее</button>
+<script>
+const mail=[
+ ['Ключи от студии','Алекс','Запасные ключи у администратора. Заберите их до шести.'],
+ ['Репетиция в пятницу','Морган','Зал наш с трёх до пяти. Захватите новый список песен.'],
+ ['Фотографии готовы','Сэм','Три пробных отпечатка на столе у окна.']
+];
+let page=0;
+function turn(step){
+ page=(page+step+mail.length)%mail.length;
+ document.getElementById('subject').textContent=mail[page][0];
+ document.getElementById('sender').textContent=mail[page][1]+' · '+(page+1)+' из '+mail.length;
+ document.getElementById('body').textContent=mail[page][2];
+}
+document.getElementById('prev').addEventListener('click',()=>turn(-1));
+document.getElementById('next').addEventListener('click',()=>turn(1));
+</script>
