@@ -4,11 +4,15 @@
 
 **English** · [Русский](README.ru.md)
 
+Send `/start` for the English catalog or `/ru` for Russian.
+
 Open [Doom in Telegram](https://t.me/awesomewidget_bot?start=doom) and tap **Start**. Use **More widgets** below the game to browse the collection. You can walk through the original Hangar, open doors and fire from the buttons underneath the frame. The engine runs on the bot’s host and returns a new frame after each move. Browse **Games** and **Tools**, or send a name or keyword in English or Russian. Results show up to six widgets per page.
 
 A hand-picked collection of little apps built with Telegram’s HTML widget format. The game board, calculator or forecast lives inside a chat message. Each entry links to its creator’s project or widget file.
 
 [Browse widgets](#widget-directory) · [Build a widget](#builders-workbench) · [Suggest a widget](https://github.com/ADanMan/awesome-telegram-widgets/issues/new?template=suggest-widget.md)
+
+[Watch Doom in Telegram (13-second clip)](https://github.com/ADanMan/telegram-doom-widget/blob/main/screenshots/doom-telegram-en.mp4)
 
 ## Widget directory
 
@@ -21,7 +25,7 @@ A hand-picked collection of little apps built with Telegram’s HTML widget form
 | **Pocket inbox** | Page through sample emails. A companion bot serves the next page when you tap. | [Widget HTML](https://github.com/VyacheslavTeplyakov/telegram-widget-lab/blob/main/examples/07-mail-live.html) · [Demo bot setup](https://github.com/VyacheslavTeplyakov/telegram-widget-lab) |
 | **Doom Message** | Play Doom’s E1M1 Hangar. Turn, walk, fire and open doors inside a message. The bot runs ViZDoom and streams each turn back to the message. | [Play in Telegram](https://t.me/ADanManDoomMessageBot?start=hangar) · [Source](https://github.com/ADanMan/telegram-doom-widget) |
 
-<img src="assets/doom-in-chat.png" width="300" alt="Doom running inside AwesomeWidgetBot after a right turn on Telegram for macOS">
+<img src="assets/doom-in-chat-en.png" width="300" alt="Doom running inside AwesomeWidgetBot after a right turn on Telegram for macOS">
 
 **Trying a source example?** Open its project for setup instructions. To display widget HTML inside Telegram, a bot sends it with [sendWidget](https://core.telegram.org/bots/api#sendwidget). For a first test, use a private chat with your bot.
 

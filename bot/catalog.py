@@ -22,6 +22,7 @@ class Widget:
 
 CATEGORIES = {"games": ("Games", "Игры"), "tools": ("Tools", "Инструменты")}
 PAGE_SIZE = 6
+RUSSIAN_CHATS = set()
 WIDGETS = {
     "doom": Widget("Doom Message", "games", "дум шутер shooter hangar", "Play E1M1 in the chat.", "https://github.com/ADanMan/telegram-doom-widget"),
     "pacman": Widget("Pacman", "games", "pac-man пакман пакмен аркада лабиринт maze arcade", "Collect dots with the arrow buttons. Avoid the ghost.", "https://github.com/ronakserry/pacman"),
@@ -87,7 +88,16 @@ def handle(message, api, doom=None):
     if chat["type"] != "private" or not message.get("text"):
         return
     name = message["text"].strip()
-    russian = (message.get("from", {}).get("language_code") or "").lower().startswith("ru")
+    chat_id = chat["id"]
+    if name in ("/ru", "/start ru"):
+        RUSSIAN_CHATS.add(chat_id)
+        show_catalog(api, chat_id, True)
+        return
+    if name in ("/en", "/start") or name.startswith("/start "):
+        RUSSIAN_CHATS.discard(chat_id)
+    if name == "/en":
+        name = "/start"
+    russian = chat_id in RUSSIAN_CHATS
     parts = name.split(maxsplit=1)
     if not parts:
         return
@@ -111,7 +121,7 @@ def handle(message, api, doom=None):
     if slug == "doom":
         markup = navigation(widget.original)
         if doom is not None:
-            doom.send(api, chat["id"], reply_markup=markup, language_code=message.get("from", {}).get("language_code"))
+            doom.send(api, chat["id"], reply_markup=markup, language_code="ru" if russian else "en")
             return
         markup["inline_keyboard"].insert(0, [{"text": "Play Doom", "url": "https://t.me/ADanManDoomMessageBot?start=hangar"}])
         api("sendMessage", chat_id=chat["id"], text="Play E1M1 inside the Doom Message bot.", reply_markup=markup)
@@ -127,10 +137,10 @@ def handle_callback(query, api, doom):
     if chat.get("type") != "private" or chat["id"] != query["from"]["id"]:
         return
     action = query.get("data", "")
-    ru = (query["from"].get("language_code") or "").lower().startswith("ru")
+    ru = chat["id"] in RUSSIAN_CHATS
     message = query["message"]
-    if action.startswith("open:"):
-        handle({"chat": chat, "from": query["from"], "text": "/start " + action[5:]}, api, doom)
+    if action.startswith("open:") and action[5:] in WIDGETS:
+        handle({"chat": chat, "from": query["from"], "text": WIDGETS[action[5:]].title}, api, doom)
     elif action in ("catalog", "home"):
         show_catalog(api, chat["id"], ru, message["message_id"] if action == "home" else None)
     elif action == "search":
