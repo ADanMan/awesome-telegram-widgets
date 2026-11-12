@@ -31,6 +31,7 @@
 - [Widget Sandbox](https://github.com/TelegramMessenger/widget-sandbox) позволяет тестировать виджет с размерами реального сообщения.
 - [TG Widget Kit](https://github.com/advanceddev/telegram-widget-kit) объединяет редактор HTML, CSS и JavaScript, предпросмотр и счётчик размера после сжатия.
 - [widgetgram](https://github.com/krendel001/widgetgram) добавляет отправку виджетов и обработку запросов в боты на aiogram 3.
+- [Telegram Widgets Skill](https://github.com/HappySean2845/telegram-widget-skill) позволяет ИИ-агентам, например Hermes Agent и OpenClaw, писать виджеты. Перед отправкой виджет проверяется на соответствие профилю, а ссылки допускаются только на домены из списка оператора.
 
 ## Запуск своего бота
 
