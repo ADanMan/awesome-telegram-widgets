@@ -35,6 +35,7 @@ A hand-picked collection of little apps built with Telegram’s HTML widget form
 - [Widget Sandbox](https://github.com/TelegramMessenger/widget-sandbox) is Telegram’s runtime and includes a guide to testing widgets at chat-bubble sizes.
 - [TG Widget Kit](https://github.com/advanceddev/telegram-widget-kit) lets you edit HTML, CSS and JavaScript with a live bubble preview and compressed-size readout.
 - [widgetgram](https://github.com/krendel001/widgetgram) adds widget sending and query handlers to Python bots built with aiogram 3.
+- [Telegram Widgets Skill](https://github.com/HappySean2845/telegram-widget-skill) lets AI agents such as Hermes Agent and OpenClaw write widgets, checks each one against the widget profile and an allowlist-only link policy, then sends and updates it.
 
 ## Add a find
 
